@@ -1,0 +1,123 @@
+@if (product()) {
+  <div class="animate-fade-in">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-sm">
+      <a routerLink="/products" class="text-primary-500 hover:underline">Products</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-600">{{ product()!.title }}</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Image Section -->
+      <div class="space-y-4">
+        <img [src]="selectedImage()" [alt]="product()!.title" class="w-full rounded-lg shadow-lg" />
+        @if (product()!.images && product()!.images!.length > 0) {
+          <div class="grid grid-cols-4 gap-2">
+            @for (img of product()!.images!; track img) {
+              <img
+                [src]="img"
+                (click)="selectedImage.set(img)"
+                class="w-full h-20 object-cover rounded cursor-pointer border-2 hover:border-primary-500 transition-colors"
+                [class.border-primary-500]="selectedImage() === img"
+              />
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Details Section -->
+      <div>
+        <mat-chip class="mb-4">{{ product()!.category }}</mat-chip>
+
+        <h1 class="text-4xl font-bold mb-4">{{ product()!.title }}</h1>
+
+        <!-- Rating -->
+        @if (product()!.rating) {
+          <div class="flex items-center gap-2 mb-4">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <mat-icon class="text-yellow-500">
+                {{ star <= product()!.rating! ? 'star' : 'star_border' }}
+              </mat-icon>
+            }
+            <span class="text-gray-600"> ({{ product()!.rating | number: '1.1-1' }}) </span>
+          </div>
+        }
+
+        <!-- Price -->
+        <div class="mb-6">
+          @if (product()!.discountPercentage) {
+            <span class="text-gray-400 line-through text-xl mr-3">
+              {{ product()!.price | indianCurrency }}
+            </span>
+          }
+          <span class="text-4xl font-bold text-primary-600">
+            {{ getPrice() | indianCurrency }}
+          </span>
+          @if (product()!.discountPercentage) {
+            <span class="ml-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm">
+              {{ product()!.discountPercentage }}% OFF
+            </span>
+          }
+        </div>
+
+        <!-- Stock -->
+        <div class="mb-6">
+          @if (product()!.stock > 0) {
+            <span class="text-green-600 font-semibold">
+              ✓ In Stock ({{ product()!.stock }} available)
+            </span>
+          } @else {
+            <span class="text-red-600 font-semibold"> ✗ Out of Stock </span>
+          }
+        </div>
+
+        <!-- Description -->
+        <p class="text-gray-700 mb-6 leading-relaxed">
+          {{ product()!.description }}
+        </p>
+
+        <!-- Actions -->
+        <div class="flex gap-4 mb-6">
+          <button
+            mat-raised-button
+            color="primary"
+            class="flex-1"
+            [disabled]="product()!.stock === 0"
+            (click)="addToCart()"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+            Add to Cart
+          </button>
+          <button mat-raised-button color="accent">
+            <mat-icon>favorite</mat-icon>
+            Wishlist
+          </button>
+        </div>
+
+        <!-- Product Info -->
+        <mat-card class="bg-gray-50">
+          <div class="space-y-2">
+            @if (product()!.brand) {
+              <div class="flex justify-between">
+                <span class="font-semibold">Brand:</span>
+                <span>{{ product()!.brand }}</span>
+              </div>
+            }
+            <div class="flex justify-between">
+              <span class="font-semibold">Category:</span>
+              <span>{{ product()!.category }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-semibold">Stock:</span>
+              <span>{{ product()!.stock }} units</span>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="text-center py-12">
+    <p>Loading product...</p>
+  </div>
+}

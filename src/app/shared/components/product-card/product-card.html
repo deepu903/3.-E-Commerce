@@ -1,0 +1,116 @@
+<mat-card
+  class="h-full flex flex-col hover:shadow-xl transition-all duration-300 cursor-pointer group"
+  appHighlight
+  [highlightColor]="'#e3f2fd'"
+  [defaultColor]="'white'"
+>
+  <!-- Product Image -->
+  <div class="relative overflow-hidden">
+    <img
+      [src]="product.thumbnail"
+      [alt]="product.title"
+      class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+      [routerLink]="['/products', product.id]"
+    />
+
+    <!-- Discount Badge -->
+    @if (product.discountPercentage && product.discountPercentage > 0) {
+      <div
+        class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg animate-bounce-in"
+      >
+        {{ product.discountPercentage | number: '1.0-0' }}% OFF
+      </div>
+    }
+
+    <!-- Stock Badge -->
+    @if (product.stock < 10 && product.stock > 0) {
+      <div
+        class="absolute top-2 left-2 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold"
+      >
+        Only {{ product.stock }} left!
+      </div>
+    } @else if (product.stock === 0) {
+      <div
+        class="absolute top-2 left-2 bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-semibold"
+      >
+        Out of Stock
+      </div>
+    }
+  </div>
+
+  <!-- Card Content -->
+  <mat-card-content class="flex-1 p-4">
+    <!--  Category -->
+    <span class="text-xs text-primary-500 font-semibold uppercase tracking-wide">
+      {{ product.category }}
+    </span>
+
+    <!-- Title -->
+    <h3
+      class="text-lg font-bold mt-2 mb-2 text-gray-800 group-hover:text-primary-600 transition-colors"
+      [routerLink]="['/product', product.id]"
+    >
+      {{ product.title | truncate: 40 }}
+    </h3>
+
+    <!-- Description -->
+    <p class="text-sm text-gray-600 mb-3">
+      {{ product.description | truncate: 80 : '...' : true }}
+    </p>
+
+    <!-- Rating -->
+    @if (product.rating) {
+      <div class="flex item-center gap-1 mb-3">
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <mat-icon class="!text-yellow-500 text-base">
+            {{ star <= product.rating! ? 'star' : 'star_border' }}
+          </mat-icon>
+        }
+        <span class="text-sm text-gray-600 ml-1"> ({{ product.rating | number: '1.1-1' }}) </span>
+      </div>
+    }
+
+    <!-- Price Section -->
+    <div class="flex items-center gap-2 mb-4">
+      @if (product.discountPercentage && product.discountPercentage > 0) {
+        <!-- Original Price (Strikethrough) -->
+        <span class="text-gray-400 line-through text-sm">
+          {{ product.price | indianCurrency }}
+        </span>
+      }
+
+      <!-- Current Price -->
+      <span class="text-2xl font-bold text-primary-600">
+        {{ getDiscountedPrice(product) | indianCurrency }}
+      </span>
+    </div>
+  </mat-card-content>
+
+  <!-- Card Action -->
+  <mat-card-actions class="p-4 pt-0 flex gap-2">
+    <!-- Add to Cart Button -->
+    <button
+      mat-raised-button
+      color="primary"
+      class="flex-2"
+      [disabled]="product.stock === 0"
+      (click)="onAddToCart()"
+      appTooltip="Add to shopping cart"
+      tooltipPosition="top"
+    >
+      <mat-icon>shopping_cart</mat-icon>
+      Add to cart
+    </button>
+
+    <!-- Quicks View Button -->
+    <button
+      mat-icon-button
+      color="primary"
+      [routerLink]="['/products', product.id]"
+      appTooltip="View details"
+      tooltipPosition="top"
+    >
+      <mat-icon>visibility</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,68 @@
+<div class="animate-fade-in">
+  <!-- Header -->
+  <div class="flex felx-col md:flex-row justify-between items center mb-4 gap-4">
+    <h1 class="text-3xl font-bold text-gray-800">Products</h1>
+    <button routerLink="/products/new" mat-raised-button color="primary" class="w-full md:w-auto">
+      <mat-icon>add</mat-icon>
+      Add Product
+    </button>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+    <div class="grid grid-cols-1 mdL:grid-cols-4 gap-4">
+      <!-- Search -->
+      <mat-form-field class="md:col-span-2" appearance="outline">
+        <mat-label>Search Products</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search by name, category..."
+        />
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Category Filter -->
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()">
+          <mat-option value="all">All Categories</mat-option>
+          @for (cat of categories(); track cat) {
+            <mat-option [value]="cat">{{ cat }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Clear Filters -->
+      <button mat-stroked-button (click)="clearFilters()" class="h-14">
+        <mat-icon>clear</mat-icon>
+        Clear Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  @if (isLoading()) {
+    <div class="text-center py-12">
+      <p class="text-gray-600">Loading Products...</p>
+    </div>
+  } @else if (filteredProducts().length === 0) {
+    <div class="text-center py-12">
+      <mat-icon class="text-6xl text-gray-400 mb-4">search_off</mat-icon>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">No Products Found</h3>
+      <p class="text-gray-500">Try adjusting your filters</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (product of filteredProducts(); track product.id) {
+        <app-product-card [product]="product" (addToCart)="onAddToCart($event)"></app-product-card>
+      }
+    </div>
+
+    <!-- Result Count -->
+    <div class="mt-6 text-center text-gray-600">
+      Showing {{ filteredProducts().length }} of {{ products().length }} products
+    </div>
+  }
+</div>
