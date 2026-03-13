@@ -1,0 +1,195 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 p-4"
+>
+  <mat-card class="w-full max-2xl animate-scale-in p-[35px]">
+    <!-- header -->
+    <div class="text-center mb-6">
+      <img src="favicon.png" alt="E-Shop Logo" class="h-16 w-16 mx-auto mb-4 object-contain" />
+      <h1 class="text-3xl font-bold text-gray-800">Create Account</h1>
+      <p class="text-gray-600 mt-2">Join us today!</p>
+    </div>
+
+    <!-- Reactive Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- First Name -->
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" placeholder="John" />
+          <mat-icon matPrefix>person</mat-icon>
+
+          @if (f['firstName'].invalid && f['firstName'].touched) {
+            <mat-error>
+              @if (f['firstName'].errors?.['required']) {
+                First name is required
+              }
+              @if (f['firstName'].errors?.['minlength']) {
+                At least 3 character required
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Last Name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" placeholder="Doe" />
+          <mat-icon matPrefix>person</mat-icon>
+
+          @if (f['lastName'].invalid && f['lastName'].touched) {
+            <mat-error>Last name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Username -->
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="johndoe" />
+          <mat-icon matPrefix>alternate_email</mat-icon>
+          @if (f['username'].invalid && f['username'].touched) {
+            <mat-error>
+              @if (f['username'].errors?.['required']) {
+                Username is required
+              }
+              @if (f['username'].errors?.['minlength']) {
+                At least 3 character required
+              }
+              @if (f['username'].errors?.['pattern']) {
+                Only letters and numbers are allowed
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="john@example" />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (f['email'].invalid && f['email'].touched) {
+            <mat-error>
+              @if (f['email'].errors?.['required']) {
+                Email is required
+              }
+              @if (f['email'].errors?.['email']) {
+                Invalid email format
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Phone -->
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Phone (Optional)</mat-label>
+          <input matInput formControlName="phone" placeholder="+91 99999 99999" />
+          <mat-icon matPrefix>phone</mat-icon>
+        </mat-form-field>
+
+        <!-- Gender -->
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="male">Male</mat-option>
+            <mat-option value="female">Female</mat-option>
+            <mat-option value="other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Role -->
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="user">User</mat-option>
+            <mat-option value="manager">Manager</mat-option>
+            <mat-option value="admin">Admin</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Password -->
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              [type]="hidePassword ? 'password' : 'text'"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+              <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+
+            @if (f['password'].invalid && f['password'].touched) {
+              <mat-error>
+                @if (f['password'].errors?.['required']) {
+                  Password is required
+                }
+                @if (f['password'].errors?.['minlength']) {
+                  At least 6 character required
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Confirm Password -->
+          <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input
+              matInput
+              formControlName="confirmPassword"
+              [type]="hidePassword ? 'password' : 'text'"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            @if (f['confirmPassword'].invalid && f['confirmPassword'].touched) {
+              <mat-error>
+                @if (f['confirmPassword'].errors?.['required']) {
+                  Confirm Password is required
+                }
+                @if (registerForm.errors?.['passwordMismatch']) {
+                  Password do not match
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Terms & Conditions -->
+          <div class="mb-4">
+            <mat-checkbox formControlName="agreeToTerms">
+              I agree to the
+              <a href="#" class="text-primary-600 hover:underline">Terms & Conditions</a>
+            </mat-checkbox>
+            @if (f['agreeToTerms'].invalid && f['agreeToTerms'].touched) {
+              <p class="text-red-500 text-sm mt-1">You must agree to terms & conditions</p>
+            }
+          </div>
+
+          <!-- Error Message -->
+          @if (errorMessage) {
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <!-- Submit Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="w-full mb-4"
+            [disabled]="registerForm.invalid || isLoading"
+          >
+            {{ isLoading ? 'Creating Account....' : 'Create Account' }}
+          </button>
+
+          <!-- Login Link -->
+          <div class="text-center text-sm text-gray-600">
+            Already have an account?
+            <a routerLink="/login" class="text-primary-600 hover:underline font-semibold ml-1"
+              >Login</a
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+</div>

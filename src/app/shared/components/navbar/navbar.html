@@ -1,0 +1,125 @@
+<!-- Navbar with materials toolBar + Tailwind-->
+<mat-toolbar class="!bg-primary-500 !text-white shadow-lg sticky top-8 z-50">
+  <div class="container-custom flex items-center justify-between w-full">
+    <!-- Logo & brand -->
+    <div class="flex items-center gap-3">
+      <button mat-icon-button class="md:hidden">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <a
+        routerLink="/"
+        class="flex items-center gap-2 no-underline hover:opacity-80 transition-opacity"
+      >
+        <img src="favicon.png" alt="E-Shop Logo" class="h-8 w-8 object-contain" />
+        <span class="text-xl font-bold hidden sm:inline">E-Shop</span>
+      </a>
+    </div>
+
+    <!-- Navigation Links (Desktop) -->
+    <nav class="hidden md:flex items-center gap-2">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-primary-600"
+        class="px-4 py-2 rounded hover:bg-primary-600 transition-colors no-underline"
+      >
+        Dashboard
+      </a>
+      <a
+        routerLink="/products"
+        routerLinkActive="bg-primary-600"
+        class="px-4 py-2 rounded hover:bg-primary-600 transition-colors no-underline"
+      >
+        Products
+      </a>
+
+      @if (isAuthenticated()) {
+        <a
+          routerLink="/cart"
+          routerLinkActive="bg-primary-600"
+          class="px-4 py-2 rounded hover:bg-primary-600 transition-colors text-white no-underline relative"
+        >
+          <mat-icon
+            [matBadge]="cartItemCount()"
+            matBadgeColor="accent"
+            [matBadgeHidden]="cartItemCount() === 0"
+            >shopping_cart</mat-icon
+          >
+        </a>
+      }
+    </nav>
+
+    <!-- User Menu -->
+    <div class="flex items-center gap-2">
+      @if (isAuthenticated()) {
+        <!-- Authenticated user menu -->
+        <button mat-button [matMenuTriggerFor]="userMenu" class="text-white">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded-full bg-white text-primary-500 flex items-center justify-center font-bold"
+            >
+              {{ getUserInitials() }}
+            </div>
+            <span class="hidden sm:inline">
+              {{ userName() }}
+            </span>
+            <mat-icon>arrow_drop_down</mat-icon>
+          </div>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/dashboard">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      } @else {
+        <!-- Guest User Buttons -->
+        <a routerLink="/login" mat-button class="text-white"> Login </a>
+        <a routerLink="/register" mat-raised-button class="bg-accent-500 text-white">Sign Up</a>
+      }
+    </div>
+  </div>
+</mat-toolbar>
+
+<!-- Mobile Menu (Toggle) -->
+@if (isMobileMenuOpen) {
+  <div class="md:hidden bg-primary-600 shadow-lg animate-slide-down">
+    <nav class="container custom py-4 space-y-2">
+      <a
+        routerLink="/dashboard"
+        (click)="closeMobileMenu()"
+        class="block px-4 py-2 rounded hover:bg-primary-700 text-white no-underline"
+        >Dashboard</a
+      >
+      <a
+        routerLink="/products"
+        (click)="closeMobileMenu()"
+        class="block px-4 py-2 rounded hover:bg-primary-700 text-white no-underline"
+        >Products</a
+      >
+      @if (isAuthenticated()) {
+        <a
+          routerLink="/cart"
+          (click)="closeMobileMenu()"
+          class="block px-4 py-2 rounded hover:bg-primary-700 text-white no-underline"
+          >Cart {{ cartItemCount() }}</a
+        >
+        <a
+          routerLink="/profile"
+          (click)="closeMobileMenu()"
+          class="block px-4 py-2 rounded hover:bg-primary-700 text-white no-underline"
+          >Profile {{ userName() }}</a
+        >
+      }
+    </nav>
+  </div>
+}

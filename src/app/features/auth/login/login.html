@@ -1,0 +1,126 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 p-4"
+>
+  <mat-card class="w-full max-w-md animate-scale-in p-[35px]">
+    <!-- Logo & Title -->
+    <div class="text-center mb-6">
+      <img src="favicon.png" alt="E-Shop Logo" class="h-16 w-16 mx-auto mb-4 object-contain" />
+      <h1 class="text-3xl font-bold text-gray-800">Welcome Back</h1>
+      <p class="text-gray-600 mt-2">Login to your account</p>
+    </div>
+
+    <!-- Login Form (Template-driven) -->
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <!-- Username Field -->
+      <mat-form-field class="w-full mb-4" appearance="outline">
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          type="text"
+          name="Username"
+          [(ngModel)]="credentials.username"
+          #username="ngModel"
+          required
+          minLength="3"
+          placeholder="Enter your username"
+        />
+        <mat-icon matPrefix>person</mat-icon>
+
+        <!-- Validation Errors -->
+        @if (username.invalid && (username.dirty || username.touched)) {
+          <mat-error>
+            @if (username.errors?.['required']) {
+              Username is required
+            }
+            @if (username.errors?.['minlength']) {
+              Username must be at least 3 characters
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Password Field -->
+      <mat-form-field class="w-full mb-4" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          name="password"
+          [(ngModel)]="credentials.password"
+          #password="ngModel"
+          required
+          minlength="6"
+          placeholder="Enter your password"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>
+            {{ hidePassword ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </button>
+
+        <!-- Validation Errors -->
+        @if (password.invalid && (password.dirty || password.touched)) {
+          <mat-error>
+            @if (password.errors?.['required']) {
+              Password is required
+            }
+            @if (password.errors?.['minlength']) {
+              Password must be at least 6 characters
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Remember Me -->
+      <div class="flex items-center justify-between mb-6">
+        <mat-checkbox name="rememberMe" [(ngModel)]="credentials.rememberMe"
+          >Remember Me</mat-checkbox
+        >
+        <a href="#" class="text-primary-600 hover:underLine text-sm">Forgot Password?</a>
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage) {
+        <div
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 animate-slide-down"
+        >
+          <mat-icon class="align-middle mr-2">error</mat-icon>
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Submit Button -->
+      <button
+        mat-raised-button
+        color-primary
+        type="submit"
+        class="w-full mb-4"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        @if (isLoading) {
+          <span>Logging in...</span>
+        } @else {
+          <span>Login</span>
+        }
+      </button>
+
+      <!-- Register Link -->
+      <div class="text-center text-sm text-gray-600">
+        Don't have an account?
+        <a routerLink="/register" class="text-primary-600 hover:underline font-semibold ml-1"
+          >Sign Up</a
+        >
+      </div>
+    </form>
+
+    <!-- Demo Credentials -->
+    <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+      <p class="text-sm font-semibold text-blue-800 mb-2">Demo Credentials</p>
+      <p class="text-xs text-blue-700">
+        <strong>Username:</strong> emilys<br />
+        <strong>Password:</strong> emilyspass
+      </p>
+    </div>
+  </mat-card>
+</div>

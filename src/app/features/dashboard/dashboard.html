@@ -1,0 +1,112 @@
+<div class="animate-fade-in">
+  <!-- Welcome Header -->
+  <div
+    class="bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-lg p-8 mb-6 shadow-xl"
+  >
+    <h1 class="text-4xl font-bold mb-2">Welcome {{ userName() }}</h1>
+    <p class="text-primary-100">Here's your dashboard overview</p>
+  </div>
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <!-- Total Products -->
+    <mat-card
+      class="bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:shadow-2xl transition-all cursor-pointer p-[10px]"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm opacity-80 mb-1">Total Products</p>
+          <h3 class="text-3xl font-bold">{{ totalProducts() }}</h3>
+          <p class="text-xs mt-2 opacity-80">In your store</p>
+        </div>
+        <mat-icon class="text-6xl opacity-80">inventory</mat-icon>
+      </div>
+    </mat-card>
+
+    <!-- Cart Items -->
+    <mat-card
+      class="bg-gradient-to-br from-green-500 to-green-600 text-white hover:shadow-2xl transition-all cursor-pointer p-[10px]"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm opacity-80 mb-1">cart Items</p>
+          <h3 class="text-3xl font-bold">{{ cartItems() }}</h3>
+          <p class="text-xs mt-2 opacity-80">In your cart</p>
+        </div>
+        <mat-icon class="text-6xl opacity-80">shopping_cart</mat-icon>
+      </div>
+    </mat-card>
+
+    <!-- Cart Total -->
+    <mat-card
+      class="bg-gradient-to-br from-purple-500 to-purple-600 text-white hover:shadow-2xl transition-all cursor-pointer p-[10px]"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm opacity-80 mb-1">Cart Total</p>
+          <h3 class="text-3xl font-bold">{{ cartTotal() | indianCurrency }}</h3>
+          <p class="text-xs mt-2 opacity-80">Cart value</p>
+        </div>
+        <mat-icon class="text-6xl opacity-80">payment</mat-icon>
+      </div>
+    </mat-card>
+
+    <!-- User Role -->
+    <mat-card
+      class="bg-gradient-to-br from-orange-500 to-orange-600 text-white hover:shadow-2xl transition-all cursor-pointer p-[10px]"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm opacity-80 mb-1">Your Role</p>
+          <h3 class="text-3xl font-bold">{{ userRole() }}</h3>
+          <p class="text-xs mt-2 opacity-80">Account Type</p>
+        </div>
+        <mat-icon class="text-6xl opacity-80">admin_panel_settings</mat-icon>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="grid grid-col-1 md:grid-cols-3 gap-6 mb-6">
+    <mat-card class="hover:shadow-xl transition-shadow p-[10px]">
+      <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <mat-icon class="!text-primary-500">shopping_bag</mat-icon>
+        Browse Products
+      </h3>
+      <p class="tet-gray-600 mb-4">Explore our wide range of products and find what you need.</p>
+      <button mat-raised-button color="primary" routerLink="/products">View Products</button>
+    </mat-card>
+
+    <mat-card class="hover:shadow-xl transition-shadow p-[10px]">
+      <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <mat-icon class="!text-green-500">shopping_Cart</mat-icon>
+        View cart
+      </h3>
+      <p class="text-gray-600 mb-4">Review your cart items proceed to checkout.</p>
+      <button mat-raised-button color="accent" routerLink="/cart">Go to Cart</button>
+    </mat-card>
+
+    <!-- <mat-card class="hover:shadow-xl transition-shadow" *appPermission="'add_products'"> -->
+    <mat-card class="hover:shadow-xl transition-shadow">
+      <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <mat-icon class="!text-purple-500">add_circle</mat-icon>
+        Add Product
+      </h3>
+      <p class="text-gray-600 mb-4">Add new products to your inventory</p>
+      <button mat-raised-button color="primary" routerLink="/products/new">Add new</button>
+    </mat-card>
+  </div>
+
+  <!-- Recent Activity -->
+  <mat-card class="mb-6">
+    <h3 class="text-2xl font-bold mb-4">Recent Activity</h3>
+    <div class="space-y-3">
+      <div class="flex item-center gap-3 p-3 bg-gray-50 rounded-lg">
+        <mat-icon class="text-blue 500">info</mat-icon>
+        <div>
+          <p class="font-semibold">Welcome To Dashboard</p>
+          <p class="text-sm text-gray-600">You logged in successfully</p>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
